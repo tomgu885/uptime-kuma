@@ -52,6 +52,7 @@
                                     </optgroup>
 
                                     <optgroup :label="$t('Specific Monitor Type')">
+                                        <option value="shadowsocks">Shadowsocks</option>
                                         <option value="steam">
                                             {{ $t("Steam Game Server") }}
                                         </option>
@@ -100,9 +101,9 @@
                             </div>
 
                             <!-- URL -->
-                            <div v-if="monitor.type === 'http' || monitor.type === 'keyword' || monitor.type === 'json-query' || monitor.type === 'real-browser' " class="my-3">
+                            <div v-if="monitor.type === 'http' || monitor.type === 'keyword' || monitor.type === 'json-query' || monitor.type === 'real-browser' || monitor.type === 'shadowsocks'" class="my-3">
                                 <label for="url" class="form-label">{{ $t("URL") }}</label>
-                                <input id="url" v-model="monitor.url" type="url" class="form-control" pattern="https?://.+" required>
+                                <input id="url" v-model="monitor.url" type="url" class="form-control" pattern="[a-z0-9]+?://.+" required>
                             </div>
 
                             <!-- gRPC URL -->
@@ -247,14 +248,14 @@
 
                             <!-- Hostname -->
                             <!-- TCP Port / Ping / DNS / Steam / MQTT / Radius / Tailscale Ping only -->
-                            <div v-if="monitor.type === 'port' || monitor.type === 'ping' || monitor.type === 'dns' || monitor.type === 'steam' || monitor.type === 'gamedig' ||monitor.type === 'mqtt' || monitor.type === 'radius' || monitor.type === 'tailscale-ping'" class="my-3">
+                            <div v-if="monitor.type === 'port' || monitor.type === 'ping' || monitor.type === 'dns' || monitor.type === 'steam' || monitor.type === 'gamedig' || monitor.type === 'mqtt' || monitor.type === 'radius' || monitor.type === 'tailscale-ping'" class="my-3">
                                 <label for="hostname" class="form-label">{{ $t("Hostname") }}</label>
                                 <input id="hostname" v-model="monitor.hostname" type="text" class="form-control" :pattern="`${monitor.type === 'mqtt' ? mqttIpOrHostnameRegexPattern : ipOrHostnameRegexPattern}`" required>
                             </div>
 
                             <!-- Port -->
                             <!-- For TCP Port / Steam / MQTT / Radius Type -->
-                            <div v-if="monitor.type === 'port' || monitor.type === 'steam' || monitor.type === 'gamedig' || monitor.type === 'mqtt' || monitor.type === 'radius'" class="my-3">
+                            <div v-if="monitor.type === 'port' || monitor.type === 'steam' || monitor.type === 'gamedig' || monitor.type === 'mqtt' || monitor.type === 'radius'  || monitor.type === 'shadowsocks'" class="my-3">
                                 <label for="port" class="form-label">{{ $t("Port") }}</label>
                                 <input id="port" v-model="monitor.port" type="number" class="form-control" required min="0" max="65535" step="1">
                             </div>

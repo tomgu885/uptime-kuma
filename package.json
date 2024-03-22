@@ -7,7 +7,7 @@
         "url": "https://github.com/louislam/uptime-kuma.git"
     },
     "engines": {
-        "node": "14 || 16 || 18 || >= 20.4.0"
+        "node": "16 || 18 || >= 20.4.0"
     },
     "scripts": {
         "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
@@ -120,6 +120,7 @@
         "mysql2": "~3.6.2",
         "nanoid": "~3.3.4",
         "node-cloudflared-tunnel": "~1.0.9",
+        "node-fetch": "^2.6.6",
         "node-radius-client": "~1.0.0",
         "nodemailer": "~6.6.5",
         "nostr-tools": "^1.13.1",
@@ -137,9 +138,11 @@
         "redbean-node": "~0.3.0",
         "redis": "~4.5.1",
         "semver": "~7.5.4",
+        "simple-proxy-agent": "^1.1.0",
         "socket.io": "~4.6.1",
         "socket.io-client": "~4.6.1",
-        "socks-proxy-agent": "6.1.1",
+        "socks-proxy-agent": "^8.0.2",
+        "socks5-http-client": "^1.0.4",
         "tar": "~6.1.11",
         "tcp-ping": "~0.1.1",
         "thirty-two": "~1.0.2",
