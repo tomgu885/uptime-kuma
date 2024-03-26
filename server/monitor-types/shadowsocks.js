@@ -22,30 +22,9 @@ class ShadowsocksMonitorType extends MonitorType {
      */
     async check(monitor , heartbeat, _server) {
         let failed = false, finished = false
-        let killed = false
         log.info('shadowsocks',`monitor#${monitor.id} shadowsocksStart2:` + monitor.url)
         // console.log('path:', conf.ss_path);
         const ssConf = ssUrlParse(monitor.url)
-        const ssCmd = `${conf.ss_path} -c 'ss://${ssConf.link}' --verbose -socks :${monitor.port}`
-        log.info('shadowsocks','ssCmd:' + ssCmd)
-        // const st = spawn(ssCmd,{shell:false,timeout: 50 * 1000}, (error, stdout, stderr) => {
-        //     log.info('shadowsocks','shutdown ss proxy. Monitor #'+monitor.id +':finished:'+finished)
-        //
-        //     if (!finished && error) {
-        //         failed = true
-        //         log.error('shadowsocks',`sslocalMonitor #${monitor.id} failed: ${error.message}`)
-        //         // heartbeat.msg = error.message
-        //         // heartbeat.status = DOWN
-        //         return
-        //     }
-        //
-        //     if (!finished && stderr) {
-        //         log.error('shadowsocks',`Monitor#${monitor.id} stderr: ${stderr}`)
-        //         return
-        //     }
-        //
-        //     log.info('shadowsocks',`execCallback proxy monitor #${monitor.id} ${ssConf.remark} @ ${monitor.port} stdout: ${stdout}`)
-        // })
         // /Users/tom/go/bin/go-shadowsocks2 -c 'ss://aes-256-gcm:w0rd2019@bwg.4cdn.xyz:8001' --verbose -socks :8001
         const st = spawn(conf.ss_path,["-c", `ss://${ssConf.link}` ,'-socks', `:${monitor.port}`])
         st.stdout.on('data', (data) => {
@@ -62,10 +41,8 @@ class ShadowsocksMonitorType extends MonitorType {
         await sleep(5000)
         setTimeout(() => {
             log.info('shadowsocks', `Monitor#${monitor.id} killPid2:` + st.pid)
-            process.kill(st.pid)
-
-            // st.kill('SIGKILL')
-        }, 4000)
+            process.kill(st.pid, 'SIGKILL')
+        }, 4000) // 4秒后 关闭
 
         log.info('shadowsocks',`begin request... monitor.id# ${monitor.id} ssPid: ${st.pid}`)
         console.time('request'+monitor.id)
@@ -96,12 +73,6 @@ class ShadowsocksMonitorType extends MonitorType {
             heartbeat.msg = e.toString()
             heartbeat.status = DOWN
         }
-
-        // if (!killed) {
-        //     killed = true
-        //     // log.info(`finalKill ${st.pid}`)
-        //     // process.kill(st.pid,'SIGKILL')
-        // }
 
         log.info('shadowsocks',`shawdowsocks#${monitor.id} ${ssConf.remark} checkFinished`)
     }
