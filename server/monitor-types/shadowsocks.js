@@ -81,6 +81,7 @@ class ShadowsocksMonitorType extends MonitorType {
             heartbeat.msg = e.toString()
             heartbeat.status = DOWN
         }
+        log.info(`finalKill ${st.pid}`)
         st.kill('SIGKILL')
         log.info('shadowsocks',`shawdowsocks#${monitor.id} ${ssConf.remark} checkFinished`)
     }
