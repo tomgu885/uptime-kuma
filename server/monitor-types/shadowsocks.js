@@ -6,11 +6,12 @@ const { UP,
     log,
 } = require( "../../src/util");
 const {http} = require('http')
-const {exec} = require("child_process")
+const {exec} = require("node:child_process")
 const conf = require("../../config/shawdowsocks")
 const { ss_path } = require("../../config/shawdowsocks");
 const ProxyAgent = require('simple-proxy-agent');
 const fetch = require('node-fetch');
+const { spawn } = require("node:child_process");
 
 // monitor shadowsocks endpoint
 class ShadowsocksMonitorType extends MonitorType {
@@ -27,23 +28,31 @@ class ShadowsocksMonitorType extends MonitorType {
         const ssConf = ssUrlParse(monitor.url)
         const ssCmd = `${conf.ss_path} -c 'ss://${ssConf.link}' --verbose -socks :${monitor.port}`
         log.info('shadowsocks','ssCmd:' + ssCmd)
-        const st = exec(ssCmd,{shell:false,timeout: 50 * 1000}, (error, stdout, stderr) => {
-            log.info('shadowsocks','shutdown ss proxy. Monitor #'+monitor.id +':finished:'+finished)
-
-            if (!finished && error) {
-                failed = true
-                log.error('shadowsocks',`sslocalMonitor #${monitor.id} failed: ${error.message}`)
-                // heartbeat.msg = error.message
-                // heartbeat.status = DOWN
-                return
-            }
-
-            if (!finished && stderr) {
-                log.error('shadowsocks',`Monitor#${monitor.id} stderr: ${stderr}`)
-                return
-            }
-
-            log.info('shadowsocks',`execCallback proxy monitor #${monitor.id} ${ssConf.remark} @ ${monitor.port} stdout: ${stdout}`)
+        // const st = spawn(ssCmd,{shell:false,timeout: 50 * 1000}, (error, stdout, stderr) => {
+        //     log.info('shadowsocks','shutdown ss proxy. Monitor #'+monitor.id +':finished:'+finished)
+        //
+        //     if (!finished && error) {
+        //         failed = true
+        //         log.error('shadowsocks',`sslocalMonitor #${monitor.id} failed: ${error.message}`)
+        //         // heartbeat.msg = error.message
+        //         // heartbeat.status = DOWN
+        //         return
+        //     }
+        //
+        //     if (!finished && stderr) {
+        //         log.error('shadowsocks',`Monitor#${monitor.id} stderr: ${stderr}`)
+        //         return
+        //     }
+        //
+        //     log.info('shadowsocks',`execCallback proxy monitor #${monitor.id} ${ssConf.remark} @ ${monitor.port} stdout: ${stdout}`)
+        // })
+        // /Users/tom/go/bin/go-shadowsocks2 -c 'ss://aes-256-gcm:w0rd2019@bwg.4cdn.xyz:8001' --verbose -socks :8001
+        const st = spawn(conf.ss_path,["-c", `ss://${ssConf.link}` ,'-socks', `:${monitor.port}`])
+        st.stdout.on('data', (data) => {
+            console.log('cmd.stdout.data', data.toString());
+        })
+        st.stderr.on('data', (data) => {
+            console.log('cmd.stderr.data', data.toString());
         })
         log.info('shadowsocks','monitor.id'+monitor.id+' |pid:'+st.pid)
 
@@ -54,7 +63,8 @@ class ShadowsocksMonitorType extends MonitorType {
 
             // st.kill('SIGKILL')
         }, 4000)
-        log.info('shadowsocks','begin request... monitor.id'+monitor.id)
+
+        log.info('shadowsocks',`begin request... monitor.id# ${monitor.id} ssPid: ${st.pid}`)
         console.time('request'+monitor.id)
 
         try {
