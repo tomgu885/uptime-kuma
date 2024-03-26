@@ -21,6 +21,7 @@ class ShadowsocksMonitorType extends MonitorType {
      */
     async check(monitor , heartbeat, _server) {
         let failed = false, finished = false
+        let killed = false
         log.info('shadowsocks',`monitor#${monitor.id} shadowsocksStart:` + monitor.url)
         // console.log('path:', conf.ss_path);
         const ssConf = ssUrlParse(monitor.url)
@@ -49,8 +50,12 @@ class ShadowsocksMonitorType extends MonitorType {
         log.info('shadowsocks','sleep before request monitor.id:' + monitor.id);
         await sleep(5000)
         setTimeout(() => {
-            log.info('shadowsocks',`Monitor#${monitor.id} killPid:`+st.pid)
-            st.kill('SIGKILL')
+            if (!killed) {
+                killed = true
+                log.info('shadowsocks', `Monitor#${monitor.id} killPid:` + st.pid)
+                process.kill(st.pid)
+            }
+            // st.kill('SIGKILL')
         }, 4000)
         log.info('shadowsocks','begin request... monitor.id'+monitor.id)
         console.time('request'+monitor.id)
@@ -81,8 +86,13 @@ class ShadowsocksMonitorType extends MonitorType {
             heartbeat.msg = e.toString()
             heartbeat.status = DOWN
         }
-        log.info(`finalKill ${st.pid}`)
-        st.kill('SIGKILL')
+
+        if (!killed) {
+            killed = true
+            log.info(`finalKill ${st.pid}`)
+            process.kill(st.pid,'SIGKILL')
+        }
+
         log.info('shadowsocks',`shawdowsocks#${monitor.id} ${ssConf.remark} checkFinished`)
     }
 }
