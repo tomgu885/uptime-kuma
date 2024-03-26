@@ -84,11 +84,11 @@ class ShadowsocksMonitorType extends MonitorType {
             heartbeat.status = DOWN
         }
 
-        if (!killed) {
-            killed = true
-            log.info(`finalKill ${st.pid}`)
-            process.kill(st.pid,'SIGKILL')
-        }
+        // if (!killed) {
+        //     killed = true
+        //     // log.info(`finalKill ${st.pid}`)
+        //     // process.kill(st.pid,'SIGKILL')
+        // }
 
         log.info('shadowsocks',`shawdowsocks#${monitor.id} ${ssConf.remark} checkFinished`)
     }
