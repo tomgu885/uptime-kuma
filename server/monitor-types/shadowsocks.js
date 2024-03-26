@@ -50,11 +50,9 @@ class ShadowsocksMonitorType extends MonitorType {
         log.info('shadowsocks','sleep before request monitor.id:' + monitor.id);
         await sleep(5000)
         setTimeout(() => {
-            if (!killed) {
-                killed = true
-                log.info('shadowsocks', `Monitor#${monitor.id} killPid:` + st.pid)
-                process.kill(st.pid)
-            }
+            log.info('shadowsocks', `Monitor#${monitor.id} killPid2:` + st.pid)
+            process.kill(st.pid)
+
             // st.kill('SIGKILL')
         }, 4000)
         log.info('shadowsocks','begin request... monitor.id'+monitor.id)
