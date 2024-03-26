@@ -26,10 +26,10 @@ class ShadowsocksMonitorType extends MonitorType {
         const ssConf = ssUrlParse(monitor.url)
         const ssCmd = `${conf.ss_path} -c 'ss://${ssConf.link}' --verbose -socks :${monitor.port}`
         log.info('shadowsocks','ssCmd:' + ssCmd)
-        const st = exec(ssCmd, (error, stdout, stderr) => {
-            if (finished) {
-                log.info('shadowsocks','shutdown ss proxy. Monitor #'+monitor.id)
-            }
+        const st = exec(ssCmd,{timeout: 50 * 1000}, (error, stdout, stderr) => {
+
+            log.info('shadowsocks','shutdown ss proxy. Monitor #'+monitor.id +':finished:'+finished)
+
             if (!finished && error) {
                 failed = true
                 log.error('shadowsocks',`sslocal Monitor #${monitor.id} failed: ${error.message}`)
@@ -43,7 +43,7 @@ class ShadowsocksMonitorType extends MonitorType {
                 return
             }
 
-            log.info('shadowsocks',`exec callback proxy monitor #${monitor.id} ${ssConf.remark} @ ${monitor.port} stdout: ${stdout}`)
+            log.info('shadowsocks',`execCallback proxy monitor #${monitor.id} ${ssConf.remark} @ ${monitor.port} stdout: ${stdout}`)
         })
         log.info('shadowsocks','monitor.id'+monitor.id+' |pid:'+st.pid)
         log.info('shadowsocks','sleep before request monitor.id:' + monitor.id);
