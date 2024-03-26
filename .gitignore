@@ -4,7 +4,7 @@ dist
 dist-ssr
 *.local
 .idea
-
+dist.tar.gz
 /data
 !/data/.gitkeep
 /data*

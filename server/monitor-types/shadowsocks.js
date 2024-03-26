@@ -50,7 +50,7 @@ class ShadowsocksMonitorType extends MonitorType {
         await sleep(5000)
         setTimeout(() => {
             log.info('shadowsocks',`Monitor#${monitor.id} kill pid:`+st.pid)
-            st.kill('SIGINT')
+            st.kill('SIGKILL')
         }, 4000)
         log.info('shadowsocks','begin request... monitor.id'+monitor.id)
         console.time('request'+monitor.id)
@@ -81,7 +81,7 @@ class ShadowsocksMonitorType extends MonitorType {
             heartbeat.msg = e.toString()
             heartbeat.status = DOWN
         }
-
+        // st.kill('SIGKILL')
         log.info('shadowsocks',`shawdowsocks ${ssConf.remark} check finished`)
     }
 }
