@@ -52,7 +52,10 @@ class ShadowsocksMonitorType extends MonitorType {
             console.log('cmd.stdout.data', data.toString());
         })
         st.stderr.on('data', (data) => {
-            console.log('cmd.stderr.data', data.toString());
+            log.info('shadowsocks','cmd.stderr.data:'+ data.toString());
+        })
+        st.on('close', (code) => {
+            log.info('shadowsocks', `st.close code:${code}`)
         })
         log.info('shadowsocks','monitor.id'+monitor.id+' |pid:'+st.pid)
 
