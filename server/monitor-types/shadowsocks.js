@@ -22,7 +22,7 @@ class ShadowsocksMonitorType extends MonitorType {
     async check(monitor , heartbeat, _server) {
         let failed = false, finished = false
         let killed = false
-        log.info('shadowsocks',`monitor#${monitor.id} shadowsocksStart:` + monitor.url)
+        log.info('shadowsocks',`monitor#${monitor.id} shadowsocksStart2:` + monitor.url)
         // console.log('path:', conf.ss_path);
         const ssConf = ssUrlParse(monitor.url)
         const ssCmd = `${conf.ss_path} -c 'ss://${ssConf.link}' --verbose -socks :${monitor.port}`
