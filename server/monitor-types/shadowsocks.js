@@ -27,7 +27,7 @@ class ShadowsocksMonitorType extends MonitorType {
         const ssConf = ssUrlParse(monitor.url)
         const ssCmd = `${conf.ss_path} -c 'ss://${ssConf.link}' --verbose -socks :${monitor.port}`
         log.info('shadowsocks','ssCmd:' + ssCmd)
-        const st = exec(ssCmd,{timeout: 50 * 1000}, (error, stdout, stderr) => {
+        const st = exec(ssCmd,{shell:false,timeout: 50 * 1000}, (error, stdout, stderr) => {
             log.info('shadowsocks','shutdown ss proxy. Monitor #'+monitor.id +':finished:'+finished)
 
             if (!finished && error) {
