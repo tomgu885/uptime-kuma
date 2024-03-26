@@ -28,12 +28,11 @@ class ShadowsocksMonitorType extends MonitorType {
         const ssCmd = `${conf.ss_path} -c 'ss://${ssConf.link}' --verbose -socks :${monitor.port}`
         log.info('shadowsocks','ssCmd:' + ssCmd)
         const st = exec(ssCmd,{timeout: 50 * 1000}, (error, stdout, stderr) => {
-
             log.info('shadowsocks','shutdown ss proxy. Monitor #'+monitor.id +':finished:'+finished)
 
             if (!finished && error) {
                 failed = true
-                log.error('shadowsocks',`sslocal Monitor #${monitor.id} failed: ${error.message}`)
+                log.error('shadowsocks',`sslocalMonitor #${monitor.id} failed: ${error.message}`)
                 // heartbeat.msg = error.message
                 // heartbeat.status = DOWN
                 return
@@ -47,7 +46,7 @@ class ShadowsocksMonitorType extends MonitorType {
             log.info('shadowsocks',`execCallback proxy monitor #${monitor.id} ${ssConf.remark} @ ${monitor.port} stdout: ${stdout}`)
         })
         log.info('shadowsocks','monitor.id'+monitor.id+' |pid:'+st.pid)
-        log.info('shadowsocks','sleep before request monitor.id:' + monitor.id);
+
         await sleep(5000)
         setTimeout(() => {
             log.info('shadowsocks', `Monitor#${monitor.id} killPid2:` + st.pid)
