@@ -45,24 +45,31 @@ class ShadowsocksMonitorType extends MonitorType {
         }, 4000) // 4秒后 关闭
 
         log.info('shadowsocks',`begin request... monitor.id# ${monitor.id} ssPid: ${st.pid}`)
-        console.time('request'+monitor.id)
+        console.time('request'+monitor.id+'/port:'+monitor.port)
+        // ipUrl, https://cz88.net/api/cz88/ip/openIPInfo?ip=
+        const ipUrl = 'https://cz88.net/api/cz88/ip/openIPInfo?ip='
 
         try {
             let startTime = dayjs().valueOf();
-            const response = await fetch('http://myip.ipip.net', {
+
+            const response = await fetch(ipUrl, {
                 agent: new ProxyAgent(`socks://127.0.0.1:${monitor.port}`),
             })
-
-            let data = await response.text()
-            data = data.trim()
+            log.info("shadowsocks", 'response:'+response.text())
+            let respText = await response.text()
+            console.log('respText:', respText)
+            // let data = await response.json().data
+            // console.log('response.json.data:', data )
+            // console.log('response.json.data.ip:', data.ip , data.geo)
+            // data = data.trim()
             console.timeEnd('request'+monitor.id)
-            log.info('shadowsocks','res data:|'+data+'|')
-            if (data === '') {
+            log.info('shadowsocks','res data:|'+respText+'|')
+            if (respText === '') {
                 console.log('response:', response)
             }
             if (!failed) {
                 heartbeat.ping = dayjs().valueOf() - startTime;
-                heartbeat.msg = data;
+                heartbeat.msg = respText;
                 heartbeat.status = UP;
                 // heartbeat.ping =
             }

@@ -18,6 +18,7 @@
                                         <option value="http">
                                             HTTP(s)
                                         </option>
+                                        <option value="shadowsocks">Shadowsocks</option>
                                         <option value="port">
                                             TCP Port
                                         </option>
@@ -52,7 +53,7 @@
                                     </optgroup>
 
                                     <optgroup :label="$t('Specific Monitor Type')">
-                                        <option value="shadowsocks">Shadowsocks</option>
+                                        
                                         <option value="steam">
                                             {{ $t("Steam Game Server") }}
                                         </option>
