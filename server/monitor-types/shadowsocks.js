@@ -47,8 +47,8 @@ class ShadowsocksMonitorType extends MonitorType {
         log.info('shadowsocks',`begin request... monitor.id# ${monitor.id} ssPid: ${st.pid}`)
         console.time('request'+monitor.id+'/port:'+monitor.port)
         // ipUrl, https://cz88.net/api/cz88/ip/openIPInfo?ip=
-        const ipUrl = 'https://cz88.net/api/cz88/ip/openIPInfo?ip='
-
+        // const ipUrl = 'https://cz88.net/api/cz88/ip/openIPInfo?ip='
+        const ipUrl = 'http://172.104.61.139/ip.php'
         try {
             let startTime = dayjs().valueOf();
 
