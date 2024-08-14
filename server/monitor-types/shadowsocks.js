@@ -65,7 +65,7 @@ class ShadowsocksMonitorType extends MonitorType {
             console.timeEnd('request'+monitor.id)
             log.info('shadowsocks','res data:|'+respText+'|')
             if (respText === '') {
-                console.log('response:', response)
+                console.log('response:', response.toString())
             }
             if (!failed) {
                 heartbeat.ping = dayjs().valueOf() - startTime;
