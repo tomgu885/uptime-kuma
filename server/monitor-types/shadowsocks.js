@@ -13,6 +13,10 @@ const ProxyAgent = require('simple-proxy-agent');
 const fetch = require('node-fetch');
 const { spawn } = require("node:child_process");
 
+// ipUrl, https://cz88.net/api/cz88/ip/openIPInfo?ip=
+// const ipUrl = 'https://cz88.net/api/cz88/ip/openIPInfo?ip='
+const ipUrl = 'http://172.104.61.139/ip.php'
+// const ipUrl = 'https://ipinfo.io/ip/'
 // monitor shadowsocks endpoint
 class ShadowsocksMonitorType extends MonitorType {
     name = 'shadowsocks'
@@ -38,24 +42,22 @@ class ShadowsocksMonitorType extends MonitorType {
         })
         log.info('shadowsocks','monitor.id'+monitor.id+' |pid:'+st.pid)
 
-        await sleep(5000)
+        await sleep(5000) // sleep 5second before http test
         setTimeout(() => {
             log.info('shadowsocks', `Monitor#${monitor.id} killPid2:` + st.pid)
             process.kill(st.pid, 'SIGKILL')
-        }, 4000) // 4秒后 关闭
+        }, 20000) // 20秒后 关闭
 
         log.info('shadowsocks',`begin request... monitor.id# ${monitor.id} ssPid: ${st.pid}`)
         console.time('request'+monitor.id+'/port:'+monitor.port)
-        // ipUrl, https://cz88.net/api/cz88/ip/openIPInfo?ip=
-        // const ipUrl = 'https://cz88.net/api/cz88/ip/openIPInfo?ip='
-        const ipUrl = 'http://172.104.61.139/ip.php'
+
         try {
             let startTime = dayjs().valueOf();
 
             const response = await fetch(ipUrl, {
                 agent: new ProxyAgent(`socks://127.0.0.1:${monitor.port}`),
             })
-            log.info("shadowsocks", 'response:'+response.text())
+            // log.info("shadowsocks", 'response:'+response.text())
             const respText = await response.text()
             console.log('respText:', respText)
             // let data = await response.json().data
