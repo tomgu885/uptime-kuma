@@ -56,7 +56,7 @@ class ShadowsocksMonitorType extends MonitorType {
                 agent: new ProxyAgent(`socks://127.0.0.1:${monitor.port}`),
             })
             log.info("shadowsocks", 'response:'+response.text())
-            let respText = await response.text()
+            const respText = await response.text()
             console.log('respText:', respText)
             // let data = await response.json().data
             // console.log('response.json.data:', data )
@@ -65,7 +65,7 @@ class ShadowsocksMonitorType extends MonitorType {
             console.timeEnd('request'+monitor.id)
             log.info('shadowsocks','res data:|'+respText+'|')
             if (respText === '') {
-                console.log('response:', response.toString())
+                log.error('shadowsocks', `Monitor#${monitor.id} return empty`)
             }
             if (!failed) {
                 heartbeat.ping = dayjs().valueOf() - startTime;
