@@ -17,7 +17,8 @@ const { spawn } = require("node:child_process");
 // const ipUrl = 'https://cz88.net/api/cz88/ip/openIPInfo?ip='
 // const ipUrl = 'http://172.104.61.139/ip.php'
 // const ipUrl = 'http://cdn1.4cdn.xyz:9991/myip'
-const ipUrl = 'http://myip.ipip.net'
+// const ipUrl = 'http://myip.ipip.net'
+const ipUrl = 'https://api.vvhan.com/api/ipInfo'
 // const ipUrl = 'https://ipinfo.io/ip/'
 // monitor shadowsocks endpoint
 class ShadowsocksMonitorType extends MonitorType {
